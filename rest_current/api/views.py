@@ -13,15 +13,15 @@ coll   = None
 
 @csrf_exempt
 def index(request):
-    try:
         if request.method == "GET":
             return JsonResponse({"Ayuda": "HelloWorld!"})
         else:
             response = {"Respuesta":"Esta Funcionando el post"}
-            # print("RESPONSE: ", response)
+
+            result = body2dict(request)
+            print("RESPONSE: ", result)
+            agregarBD(result)
             return JsonResponse(response)
-    except SympifyError as e:
-        return JsonResponse({"error": "Verifique los datos de entrada"})
 
 @csrf_exempt
 def body2dict(request):
@@ -31,9 +31,10 @@ def body2dict(request):
 
     return json.loads(request.body.decode("UTF-8"))
 
-def agregarBD(request):
-
+def agregarBD(result):
+    current = result['current']
     client = MongoClient()
     db = client[databaseName]
     coll = db[collectionName]
-    result = coll.insert_one(request)
+    res = db.coll.update_one({u'id': 1}, {'$set': {'current': current}})
+    print res.matched_count
