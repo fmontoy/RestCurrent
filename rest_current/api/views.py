@@ -1,7 +1,15 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from sympy import SympifyError
 import json
+from pymongo import MongoClient
+
+databaseName = "ceiba_data"
+collectionName = "current"
+
+client = None
+db     = None
+coll   = None
+
 
 @csrf_exempt
 def index(request):
@@ -9,8 +17,6 @@ def index(request):
         if request.method == "GET":
             return JsonResponse({"Ayuda": "HelloWorld!"})
         else:
-            params = body2dict(request)
-            print("PARAMS ", params)
             response = {"Respuesta":"Esta Funcionando el post"}
             # print("RESPONSE: ", response)
             return JsonResponse(response)
@@ -24,3 +30,10 @@ def body2dict(request):
     """
 
     return json.loads(request.body.decode("UTF-8"))
+
+def agregarBD(request):
+
+    client = MongoClient()
+    db = client[databaseName]
+    coll = db[collectionName]
+    result = coll.insert_one(request)
