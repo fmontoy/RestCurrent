@@ -1,0 +1,7 @@
+Django==1.11.13
+django-mongodb-engine==0.6.0
+djangotoolbox==1.8.0
+numpy==1.14.3
+pymongo==3.6.1
+pytz==2018.4
+simpy==3.0.10
