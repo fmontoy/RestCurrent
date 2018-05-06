@@ -19,7 +19,6 @@ def index(request):
             response = {"Respuesta":"Esta Funcionando el post"}
 
             result = body2dict(request)
-            print("RESPONSE: ", result)
             agregarBD(result)
             return JsonResponse(response)
 
@@ -36,5 +35,5 @@ def agregarBD(result):
     client = MongoClient()
     db = client[databaseName]
     coll = db[collectionName]
-    res = db.coll.update_one({u'id': 1}, {'$set': {'current': current}})
-    print res.matched_count
+    res = db.coll.find({"clave":1})
+    print res
